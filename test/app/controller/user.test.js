@@ -2,7 +2,7 @@
 
 const { assert, app } = require('egg-mock/bootstrap');
 
-describe('test/app/controller/users.test.js', () => {
+describe('test/app/service/user.test.js', () => {
   describe('GET /users', () => {
     it('should work', async () => {
       // 通过 factory-girl 快速创建 user 对象到数据库中

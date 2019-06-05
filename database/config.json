@@ -12,5 +12,12 @@
     "database": "egg-sequelize-doc-unittest",
     "host": "127.0.0.1",
     "dialect": "mysql"
+  },
+  "production": {
+    "username": "egg",
+    "password": "123456",
+    "database": "egg-sequelize-doc-unittest",
+    "host": "114.116.18.221",
+    "dialect": "mysql"
   }
 }
