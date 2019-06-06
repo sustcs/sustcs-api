@@ -8,3 +8,12 @@ exports.sequelize = {
   password: '123456',
   database: 'egg-sequelize-doc-unittest',
 };
+exports.security = {
+  csrf: {
+    enable: false
+  },
+};
+exports.cors = {
+  origin:'*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+};
