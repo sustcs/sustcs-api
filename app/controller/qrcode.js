@@ -23,7 +23,7 @@ class QrcodeController extends Controller {
       ctx.status = 200;
       ctx.body = {
         uuid: uuid,
-        qrCodeContent: authPage[action] + uuid,
+        qrCodeKey: authPage[action] + uuid,
         expire: expire,
         msg: "success"
       };
