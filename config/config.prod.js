@@ -14,6 +14,6 @@ exports.security = {
   },
 };
 exports.cors = {
-  origin:'*',
+  origin:['http://localhost:3000/'],
   allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
 };
