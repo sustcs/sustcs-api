@@ -38,3 +38,12 @@ exports.io = {
     port: 6379,
   },
 };
+exports.security = {
+  csrf: {
+    enable: false
+  },
+};
+exports.cors = {
+  origin:[ 'http://localhost:3000' ],
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+};

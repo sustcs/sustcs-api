@@ -13,20 +13,21 @@ class QrcodeController extends Controller {
   async auth() {
     const { ctx } = this;
     const { uuid, action } = ctx.request.body;
-    if (!action in authPage) {
+    if (!(action in authPage)) {
       ctx.status = 400;
       ctx.body = {
         msg: "Undefined action"
       }
-      return ;
-    } 
-    ctx.status = 200;
-    ctx.body = {
-      uuid: uuid,
-      qrCodeContent: authPage[action] + uuid,
-      expire: expire,
-      msg: "success"
-    };
+    }
+    else {
+      ctx.status = 200;
+      ctx.body = {
+        uuid: uuid,
+        qrCodeContent: authPage[action] + uuid,
+        expire: expire,
+        msg: "success"
+      };
+    }
   }
 }
 
