@@ -4,6 +4,9 @@
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  app.router.get('/', app.controller.home.index);
+  const { router, controller } = app;
+  router.get('/', controller.home.index);
+  router.post('/qrcode', controller.qrcode.auth);
   require('./router/user')(app);
+  
 };

@@ -70,6 +70,18 @@ class UserController extends Controller {
     await user.destroy();
     ctx.status = 200;
   }
+  async adminLogin() {
+    const ctx = this.ctx;
+    const id = ctx.helper.parseInt(ctx.params.id);
+    const user = await ctx.model.User.findByPk(id);
+    if (!user) {
+      ctx.status = 404;
+      return;
+    }
+
+    await user.destroy();
+    ctx.status = 200;
+  }
 }
 
 module.exports = UserController;
