@@ -21,14 +21,10 @@ exports.io = {
     wsEngine: 'ws',
   }, // passed to engine.io
   namespace: {
-    '/': {
+    '/qrcode': {
       connectionMiddleware: [
         'auth',
       ],
-      packetMiddleware: [],
-    },
-    '/example': {
-      connectionMiddleware: [],
       packetMiddleware: [],
     },
   },

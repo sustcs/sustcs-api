@@ -2,18 +2,17 @@
 
 const Controller = require('egg').Controller;
 
-class NspController extends Controller {
-  async exchange() {
+class qrcodeController extends Controller {
+  async auth() {
     const { ctx, app } = this;
-    const nsp = app.io.of('/');
+    const nsp = app.io.of('/qrcode');
     const message = ctx.args[0] || {};
     const socket = ctx.socket;
     const client = socket.id;
-
     try {
       const { target, payload } = message;
       if (!target) return;
-      const msg = ctx.helper.parseMsg('exchange', payload, { client, target });
+      const msg = ctx.helper.parseMsg('auth', payload, { client, target });
       nsp.emit(target, msg);
     } catch (error) {
       app.logger.error(error);
@@ -21,4 +20,4 @@ class NspController extends Controller {
   }
 }
 
-module.exports = NspController;
+module.exports = qrcodeController;

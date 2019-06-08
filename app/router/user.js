@@ -5,5 +5,5 @@ module.exports = app => {
   const { router, controller, io} = app;
   router.resources('users', '/users', controller.user);
   // socket.io
-  io.of('/').route('exchange', io.controller.nsp.exchange);
+  io.of('/qrcode').route('auth', io.controller.qrcode.auth);
 };

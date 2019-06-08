@@ -1,25 +1,21 @@
 'use strict';
 
-const PREFIX = 'room';
-
 module.exports = () => {
   return async (ctx, next) => {
-    const { app, socket, logger, helper } = ctx;
+    const { app, socket, logger } = ctx;
     const id = socket.id;
-    const nsp = app.io.of('/');
+    const nsp = app.io.of('/qrcode');
     const query = socket.handshake.query;
 
-    // 用户信息
-    const { room, userId } = query;
-    const rooms = [ room ];
+    const { room, type, expire } = query;
 
-    logger.debug('#user_info', id, room, userId);
+    logger.debug('#user_info', id, room, type);
 
     const tick = (id, msg) => {
       logger.debug('#tick', id, msg);
 
       // 踢出用户前发送消息
-      socket.emit(id, helper.parseMsg('deny', msg));
+      socket.emit('deny', msg);
 
       // 调用 adapter 方法踢出用户，客户端触发 disconnect 事件
       nsp.adapter.remoteDisconnect(id, true, err => {
@@ -27,62 +23,41 @@ module.exports = () => {
       });
     };
 
-    // 检查房间是否存在，不存在则踢出用户
-    // 备注：此处 app.redis 与插件无关，可用其他存储代替
-    const hasRoom = await app.redis.get(`${PREFIX}:${room}`);
-
-    logger.debug('#has_exist', hasRoom);
-
-    if (!hasRoom) {
+    let check = true;
+    let conCount = await app.redis.scard(room);
+    if (conCount === 2) {
       tick(id, {
         type: 'deleted',
-        message: 'deleted, room has been deleted.',
+        message: 'deleted, someone is connecting.',
       });
+      logger.warn('someone is connecting');
+      check = false;
       return;
+    } 
+    let hasRoom = await app.redis.exists(room);
+    if(type === 'weapp' && !hasRoom) {
+      tick(id, {
+        type: 'invalid',
+        message: 'invalid QRcode.',
+      });
+      check = false;
+      return;
+    } 
+    if(check) {
+      logger.info('#join', room);
+      socket.join(room,() => {
+        nsp.to(room).emit('join', type);
+        if(conCount === 0) {
+          app.redis.sadd(room, type);
+          app.redis.expire(room, expire);
+        } else {
+          app.redis.sadd(room, type);
+        }
+        
+      });
+      await next();
     }
-
-    // 用户加入
-    logger.debug('#join', room);
-    socket.join(room);
-
-    // 在线列表
-    nsp.adapter.clients(rooms, (err, clients) => {
-      logger.debug('#online_join', clients);
-
-      // 更新在线用户列表
-      nsp.to(room).emit('online', {
-        clients,
-        action: 'join',
-        target: 'participator',
-        message: `User(${id}) joined.`,
-      });
-    });
-
-    await next();
-
-    // 用户离开
-    logger.debug('#leave', room);
-
-    // 在线列表
-    nsp.adapter.clients(rooms, (err, clients) => {
-      logger.debug('#online_leave', clients);
-
-      // 获取 client 信息
-      // const clientsDetail = {};
-      // clients.forEach(client => {
-      //   const _client = app.io.sockets.sockets[client];
-      //   const _query = _client.handshake.query;
-      //   clientsDetail[client] = _query;
-      // });
-
-      // 更新在线用户列表
-      nsp.to(room).emit('online', {
-        clients,
-        action: 'leave',
-        target: 'participator',
-        message: `User(${id}) leaved.`,
-      });
-    });
-
+    socket.leave(room);
+    app.redis.del(room);
   };
 };

@@ -13,7 +13,8 @@
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^5.0.0",
     "egg-socket.io": "^4.1.5",
-    "mysql2": "^1.6.5"
+    "mysql2": "^1.6.5",
+    "qs": "^6.7.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
