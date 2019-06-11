@@ -10,8 +10,7 @@ describe('test/app/service/user.test.js', () => {
       const res = await app.httpRequest().get('/users?limit=2');
       assert(res.status === 200);
       assert(res.body.length === 2);
-      assert(res.body[0].name);
-      assert(res.body[0].age);
+      assert(res.body[0].openid);
     });
   });
 
@@ -20,7 +19,7 @@ describe('test/app/service/user.test.js', () => {
       const user = await app.factory.create('user');
       const res = await app.httpRequest().get(`/users/${user.id}`);
       assert(res.status === 200);
-      assert(res.body.age === user.age);
+      assert(res.body.openid === user.openid);
     });
   });
 
@@ -29,32 +28,29 @@ describe('test/app/service/user.test.js', () => {
       app.mockCsrf();
       let res = await app.httpRequest().post('/users')
         .send({
-          age: 10,
-          name: 'name',
+          openid: 'openid',
         });
       assert(res.status === 201);
       assert(res.body.id);
 
       res = await app.httpRequest().get(`/users/${res.body.id}`);
       assert(res.status === 200);
-      assert(res.body.name === 'name');
+      assert(res.body.openid === 'openid');
     });
   });
-  describe('PUT /users/:id', () => {
+  describe('PUT /users/:openid', () => {
     it('should work', async () => {
       app.mockCsrf();
       const user = await app.factory.create('user');
-      let res = await app.httpRequest().put(`/users/${user.id}`)
+      let res = await app.httpRequest().put(`/users/${user.openid}`)
         .send({
-          age: 10,
-          name: 'names',
+          username: 'test',
         });
-      assert(res.status === 200);
-      assert(res.body.id);
+      assert(res.status === 204);
 
       res = await app.httpRequest().get(`/users/${user.id}`);
       assert(res.status === 200);
-      assert(res.body.name === 'names');
+      assert(res.body.username === 'test');
     });
   });
   describe('DELETE /users/:id', () => {

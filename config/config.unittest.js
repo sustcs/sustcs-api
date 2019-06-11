@@ -2,9 +2,9 @@
 
 exports.sequelize = {
   dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
-  host: '114.116.18.221',
+  host: '127.0.0.1',
   port: 3306,
-  username: 'egg',
+  username: 'root',
   password: '123456',
-  database: 'egg-sequelize-doc-unittest',
+  database: 'sustcs-unittest',
 };

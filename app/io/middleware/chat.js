@@ -4,12 +4,12 @@ module.exports = () => {
   return async (ctx, next) => {
     const { app, socket, logger } = ctx;
     const id = socket.id;
-    const nsp = app.io.of('/qrcode');
+    const nsp = app.io.of('/team');
     const query = socket.handshake.query;
 
-    const { room, type, expire } = query;
+    const { room, username } = query;
 
-    logger.debug('#user_info', id, room, type);
+    logger.debug('#user_info', id, room, username);
 
     const tick = (id, msg) => {
       logger.debug('#tick', id, msg);
@@ -22,42 +22,38 @@ module.exports = () => {
         logger.error(err);
       });
     };
+    // 检查房间是否存在(team.id)，检查该用户名是否在该队伍中
+    // check()
+    // ...
 
-    let check = true;
-    const conCount = await app.redis.scard(room);
-    if (conCount === 2) {
+    const check = true;
+    if (!check) {
       tick(id, {
         type: 'deleted',
         message: 'deleted, someone is connecting.',
       });
       logger.warn('someone is connecting');
-      check = false;
       return;
     }
-    const hasRoom = await app.redis.exists(room);
-    if (type === 'weapp' && !hasRoom) {
-      tick(id, {
-        type: 'invalid',
-        message: 'invalid QRcode.',
-      });
-      check = false;
-      return;
-    }
+    const conCount = await app.redis.scard(room);
     if (check) {
       logger.info('#join', room);
-      socket.join(room, () => {
-        nsp.to(room).emit('join', type);
-        if (conCount === 0) {
-          app.redis.sadd(room, type);
-          app.redis.expire(room, expire);
-        } else {
-          app.redis.sadd(room, type);
-        }
 
+      socket.join(room, () => {
+        nsp.to(room).emit('join', {
+          username,
+          numUsers: conCount + 1,
+        });
+        app.redis.sadd(room, username);
       });
       await next();
     }
-    socket.leave(room);
-    app.redis.del(room);
+    socket.leave(room, () => {
+      nsp.to(room).emit('leave', {
+        username,
+        numUsers: conCount - 1,
+      });
+      app.redis.srem(room, username);
+    });
   };
 };

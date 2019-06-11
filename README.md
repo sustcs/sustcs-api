@@ -56,6 +56,9 @@ ci环境下没有数据库
 # heados
 index路由提示API还是列出所有资源
 
+# init
+npx sequelize db:migrate
+NODE_ENV=test npx sequelize db:migrate
 # 定位
 ## Controller
 1. 获取参数、校验参数

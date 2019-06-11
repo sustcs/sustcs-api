@@ -1,12 +1,12 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const {stringify} = require('qs');
+const { stringify } = require('qs');
 const authPage = {
-  "weapp": "/pages/auth/auth?",
-  "h5": ""
+  weapp: '/pages/auth/auth?',
+  h5: '',
 };
-const expire = 60;
+const expire = 300;
 
 class QrcodeController extends Controller {
   /**
@@ -17,13 +17,13 @@ class QrcodeController extends Controller {
     const { prefix, scanType, key, action } = ctx.request.query;
     ctx.status = 200;
     ctx.body = {
-      statusCode: 1,
+      statusCode: 200,
       msg: {
         qrCode: prefix + scanType + authPage[scanType] + stringify({
-          key,action
+          key, action,
         }),
-        expire: expire,
-      }
+        expire,
+      },
     };
   }
 }

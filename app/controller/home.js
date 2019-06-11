@@ -4,8 +4,15 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async index() {
-    const { ctx } = this;
-    ctx.body = 'hi, hiegg';
+    const { ctx, config } = this;
+    ctx.status = 200;
+    ctx.body = JSON.stringify({
+      "introduction_url": config.apiUrl + "introductions",
+      "user_url": config.apiUrl + "users",
+      "qrcode_url": config.apiUrl + "qrcode",
+      "teacher_url": config.apiUrl + "teachers",
+      "competition_url": config.apiUrl + "competitions",
+    },null,"\t");
   }
   async search() {
     const { ctx } = this;

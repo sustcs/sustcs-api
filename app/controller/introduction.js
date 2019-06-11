@@ -1,10 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-
-class UserController extends Controller {
+class IntroductionController extends Controller {
   /**
-   * list all users
+   * list all introductions
    */// ============================================================================================>
   async index() {
     // get and check params
@@ -12,82 +11,84 @@ class UserController extends Controller {
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
+      where: { enable: true },
+      raw: true,
     };
-    const list = await ctx.model.User.findAll(query);
+    const list = await ctx.model.Introduction.findAll(query);
     ctx.status = 200;
     ctx.body = list;
   }
   /**
-   * show user info
+   * show introduction info
    */// ============================================================================================>
   async show() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const user = await ctx.model.User.findByPk(id);
-    if (!user) {
+    const introduction = await ctx.model.Introduction.findByPk(id);
+    if (!introduction) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "User don't exist",
+        msg: "introduction don't exist",
       };
       return;
     }
     ctx.status = 200;
-    ctx.body = user;
+    ctx.body = introduction;
   }
   /**
-   * create user
+   * create introduction
    */// ============================================================================================>
   async create() {
     const ctx = this.ctx;
-    const { openid } = ctx.request.body;
-    const user = await ctx.model.User.findByOpenid(openid);
-    if (user !== null) {
+    const { title, description, enable } = ctx.request.body;
+    const introduction = await ctx.model.Introduction.findByTitle(title);
+    if (introduction !== null) {
       ctx.status = 403;
       ctx.body = {
         statusCode: 403,
-        msg: 'User exist',
+        msg: 'introduction exist',
       };
       return;
     }
-    const result = await ctx.model.User.create({ openid });
+    const result = await ctx.model.Introduction.create({ title, description, enable });
     ctx.status = 201;
     ctx.body = result;
   }
   /**
-   * update user info
+   * update introduction info
    */// ============================================================================================>
   async update() {
     const ctx = this.ctx;
-    const openid = ctx.helper.parseInt(ctx.params.id);
-    const user = await ctx.model.User.findByOpenid(openid);
-    if (!user) {
+    const id = ctx.helper.parseInt(ctx.params.id);
+    const introduction = await ctx.model.Introduction.findByPk(id);
+    if (!introduction) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "User don't exist",
+        msg: "introduction don't exist",
       };
       return;
     }
     const data = ctx.request.body;
-    await user.update(data);
+    await introduction.update(data);
     ctx.status = 204;
   }
   /**
-   * delete user
+   * delete introduction
    */// ============================================================================================>
   async destroy() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const user = await ctx.model.User.findByPk(id);
-    if (!user) {
+    const introduction = await ctx.model.Introduction.findByPk(id);
+    if (!introduction) {
       ctx.status = 404;
       return;
     }
 
-    await user.destroy();
+    await introduction.destroy();
     ctx.status = 200;
   }
 }
 
-module.exports = UserController;
+module.exports = IntroductionController;

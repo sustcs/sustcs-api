@@ -1,19 +1,58 @@
 'use strict';
 
 exports.sequelize = {
-  dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
-  host: '114.116.18.221',
+  dialect: 'mysql',
+  host: '127.0.0.1',
   port: 3306,
-  username: 'egg',
-  password: '123456',
-  database: 'egg-sequelize-doc-unittest',
+  username: 'api',
+  password: 'api',
+  database: 'api',
+};
+exports.redis = {
+  client: {
+    port: 6379,
+    host: '127.0.0.1',
+    password: '',
+    db: 0,
+  },
+};
+exports.io = {
+  init: {
+    wsEngine: 'ws',
+  }, // passed to engine.io
+  namespace: {
+    '/qrcode': {
+      connectionMiddleware: [
+        'auth',
+      ],
+      packetMiddleware: [],
+    },
+    '/team': {
+      connectionMiddleware: [
+        'chat',
+      ],
+      packetMiddleware: [],
+    },
+  },
+
+  redis: {
+    host: '127.0.0.1',
+    port: 6379,
+  },
 };
 exports.security = {
   csrf: {
-    enable: false
+    enable: false,
   },
 };
 exports.cors = {
-  origin:'*', // modify
-  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
 };
+exports.view = {
+  defaultViewEngine: 'nunjucks',
+  mapping: {
+    '.html': 'nunjucks',
+  },
+};
+exports.apiUrl = "https://api.test.makergyt.com/";

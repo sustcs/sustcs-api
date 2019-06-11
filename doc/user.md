@@ -6,3 +6,16 @@
 |POST|/users|create_user||app.controller.user.create|
 |PUT|/users/:id|update_user||app.controller.user.update|
 |DELETE|/users/:id|delete_user||app.controller.user.destroy|
+
+```js
+{
+  id: '',
+  username: '',
+  avatar: '',
+  openid: '',
+  schoolId: '',
+  realName: '',
+  created_at: '',
+  updated_at: '',
+}
+```

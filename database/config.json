@@ -2,22 +2,22 @@
   "development": {
     "username": "root",
     "password": "123456",
-    "database": "egg-sequelize-doc-default",
+    "database": "sustcs-default",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "123456",
-    "database": "egg-sequelize-doc-unittest",
+    "database": "sustcs-unittest",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "egg",
-    "password": "123456",
-    "database": "egg-sequelize-doc-unittest",
-    "host": "114.116.18.221",
+    "username": "api",
+    "password": "api",
+    "database": "api",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }

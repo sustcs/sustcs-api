@@ -6,7 +6,7 @@ exports.sequelize = {
   port: 3306,
   username: 'root',
   password: '123456',
-  database: 'egg-sequelize-doc-default',
+  database: 'sustcs-default',
 };
 exports.redis = {
   client: {
@@ -27,6 +27,12 @@ exports.io = {
       ],
       packetMiddleware: [],
     },
+    '/team': {
+      connectionMiddleware: [
+        'chat',
+      ],
+      packetMiddleware: [],
+    },
   },
 
   redis: {
@@ -36,10 +42,17 @@ exports.io = {
 };
 exports.security = {
   csrf: {
-    enable: false
+    enable: false,
   },
 };
 exports.cors = {
-  origin:'*',
-  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
 };
+exports.view = {
+  defaultViewEngine: 'nunjucks',
+  mapping: {
+    '.html': 'nunjucks',
+  },
+};
+exports.apiUrl = "http://127.0.0.1:7001/";
