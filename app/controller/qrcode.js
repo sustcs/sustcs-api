@@ -1,26 +1,33 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const { stringify } = require('qs');
+const { parse, stringify } = require('qs');
 const authPage = {
   weapp: '/pages/auth/auth?',
   h5: '',
 };
-const expire = 300;
+const authRule = {
+  prefix: 'string', // url in production
+  scanType: { type: 'enum', values: [ 'weapp', 'h5' ] },
+  param: 'string',
+  action: 'string', // enum in production
+};
 
 class QrcodeController extends Controller {
   /**
    * General authorization operation
    */// ============================================================================================>
   async auth() {
-    const { ctx } = this;
-    const { prefix, scanType, key, action } = ctx.request.query;
+    const { ctx, config } = this;
+    const expire = config.qrCode.expire;
+    const { prefix, scanType, param, action } = ctx.request.query;
+    ctx.validate(authRule, parse(ctx.request.query));
     ctx.status = 200;
     ctx.body = {
       statusCode: 200,
       msg: {
         qrCode: prefix + scanType + authPage[scanType] + stringify({
-          key, action,
+          param, action,
         }),
         expire,
       },

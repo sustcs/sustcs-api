@@ -55,4 +55,6 @@ exports.view = {
     '.html': 'nunjucks',
   },
 };
-exports.apiUrl = "https://api.test.makergyt.com/";
+exports.qrCode = {
+  expire: 300,
+};

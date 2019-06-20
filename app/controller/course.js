@@ -1,9 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-class teamController extends Controller {
+class CourseController extends Controller {
   /**
-   * list all teams
+   * list all courses
    */// ============================================================================================>
   async index() {
     // get and check params
@@ -13,81 +13,83 @@ class teamController extends Controller {
       offset: ctx.helper.parseInt(ctx.query.offset),
       raw: true,
     };
-    const list = await ctx.model.Team.findAll(query);
+    const list = await ctx.model.Course.findAll(query);
     ctx.status = 200;
     ctx.body = list;
   }
   /**
-   * show team info
+   * show course info
    */// ============================================================================================>
   async show() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const course = await ctx.model.Course.findByPk(id);
+    if (!course) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "course don't exist",
       };
       return;
     }
     ctx.status = 200;
-    ctx.body = team;
+    ctx.body = course;
   }
   /**
-   * create team
+   * create course
    */// ============================================================================================>
   async create() {
     const ctx = this.ctx;
     const { title, description, enable } = ctx.request.body;
-    const team = await ctx.model.Team.findByTitle(title);
-    if (team !== null) {
+    const course = await ctx.model.Course.findByTitle(title);
+    if (course !== null) {
       ctx.status = 403;
       ctx.body = {
         statusCode: 403,
-        msg: 'team exist',
+        msg: 'course exist',
       };
       return;
     }
-    const result = await ctx.model.Team.create({ title, description, enable });
+    const result = await ctx.model.Course.create({ title, description, enable });
     ctx.status = 201;
-    ctx.body = result;
+    ctx.body = {
+      id: result.id,
+    };
   }
   /**
-   * update team info
+   * update course info
    */// ============================================================================================>
   async update() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const course = await ctx.model.Course.findByPk(id);
+    if (!course) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "course don't exist",
       };
       return;
     }
     const data = ctx.request.body;
-    await team.update(data);
+    await course.update(data);
     ctx.status = 204;
   }
   /**
-   * delete team
+   * delete course
    */// ============================================================================================>
   async destroy() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const course = await ctx.model.Course.findByPk(id);
+    if (!course) {
       ctx.status = 404;
       return;
     }
 
-    await team.destroy();
+    await course.destroy();
     ctx.status = 200;
   }
 }
 
-module.exports = teamController;
+module.exports = CourseController;

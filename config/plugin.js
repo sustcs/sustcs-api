@@ -16,7 +16,7 @@ exports.cors = {
   enable: true,
   package: 'egg-cors',
 };
-exports.nunjucks = {
+exports.validate = {
   enable: true,
-  package: 'egg-view-nunjucks',
+  package: 'egg-validate',
 };

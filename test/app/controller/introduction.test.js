@@ -2,7 +2,7 @@
 
 const { assert, app } = require('egg-mock/bootstrap');
 
-describe('test/app/service/introduction.test.js', () => {
+describe('test/app/controller/introduction.test.js', () => {
   describe('GET /introductions', () => {
     it('should work', async () => {
       // 通过 factory-girl 快速创建 introduction 对象到数据库中

@@ -5,11 +5,13 @@ module.exports = app => {
 
   const Introduction = app.model.define('introductions', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    title: STRING,
+    name: STRING,
+    cover: STRING,
+    github: STRING,
     description: TEXT,
-    enable: { type: BOOLEAN, defaultValue: true },
     created_at: DATE,
     updated_at: DATE,
+    required: BOOLEAN,
   });
   Introduction.findByTitle = async function(title) {
     return await this.findOne({

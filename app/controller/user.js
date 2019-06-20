@@ -19,11 +19,12 @@ class UserController extends Controller {
   }
   /**
    * show user info
+   * via openid
    */// ============================================================================================>
   async show() {
     const ctx = this.ctx;
-    const id = ctx.helper.parseInt(ctx.params.id);
-    const user = await ctx.model.User.findByPk(id);
+    const openid = ctx.params.id;
+    const user = await ctx.model.User.findByOpenid(openid);
     if (!user) {
       ctx.status = 404;
       ctx.body = {
@@ -59,7 +60,7 @@ class UserController extends Controller {
    */// ============================================================================================>
   async update() {
     const ctx = this.ctx;
-    const openid = ctx.helper.parseInt(ctx.params.id);
+    const openid = ctx.params.id;
     const user = await ctx.model.User.findByOpenid(openid);
     if (!user) {
       ctx.status = 404;
@@ -87,6 +88,39 @@ class UserController extends Controller {
 
     await user.destroy();
     ctx.status = 200;
+  }
+  /**
+   * user login
+   * already register
+   * need to do protection and authorication
+   */// ============================================================================================>
+  async login() {
+    const ctx = this.ctx;
+    const { username, avatarUrl } = ctx.request.body;
+    const user = await ctx.model.User.findByschool_id(username);
+    if (!user || user.type === 'student' || user.type === null) {
+      ctx.status = 403;
+      ctx.body = {
+        statusCode: 403,
+        msg: {
+          status: 'error',
+          currentAuthority: 'guest',
+        },
+      };
+      return;
+    }
+    ctx.status = 200;
+    ctx.body = {
+      statusCode: 200,
+      msg: {
+        status: 'ok',
+        currentAuthority: user.type,
+        userInfo: {
+          username,
+          avatarUrl,
+        },
+      },
+    };
   }
 }
 

@@ -15,7 +15,7 @@
   id: { type: INTEGER, primaryKey: true, autoIncrement: true },
   title: STRING,
   description: TEXT,
-  enable: BOOLEAN,
+  enable: BOOLEAN, // tinyint 1, 0
   created_at: DATE,
   updated_at: DATE,
 }

@@ -1,9 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-class teamController extends Controller {
+class competitionController extends Controller {
   /**
-   * list all teams
+   * list all competitions
    */// ============================================================================================>
   async index() {
     // get and check params
@@ -13,81 +13,81 @@ class teamController extends Controller {
       offset: ctx.helper.parseInt(ctx.query.offset),
       raw: true,
     };
-    const list = await ctx.model.Team.findAll(query);
+    const list = await ctx.model.Competition.findAll(query);
     ctx.status = 200;
     ctx.body = list;
   }
   /**
-   * show team info
+   * show competition info
    */// ============================================================================================>
   async show() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const competition = await ctx.model.Competition.findByPk(id);
+    if (!competition) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "competition don't exist",
       };
       return;
     }
     ctx.status = 200;
-    ctx.body = team;
+    ctx.body = competition;
   }
   /**
-   * create team
+   * create competition
    */// ============================================================================================>
   async create() {
     const ctx = this.ctx;
     const { title, description, enable } = ctx.request.body;
-    const team = await ctx.model.Team.findByTitle(title);
-    if (team !== null) {
+    const competition = await ctx.model.Competition.findByTitle(title);
+    if (competition !== null) {
       ctx.status = 403;
       ctx.body = {
         statusCode: 403,
-        msg: 'team exist',
+        msg: 'competition exist',
       };
       return;
     }
-    const result = await ctx.model.Team.create({ title, description, enable });
+    const result = await ctx.model.competition.create({ title, description, enable });
     ctx.status = 201;
     ctx.body = result;
   }
   /**
-   * update team info
+   * update competition info
    */// ============================================================================================>
   async update() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const competition = await ctx.model.Competition.findByPk(id);
+    if (!competition) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "competition don't exist",
       };
       return;
     }
     const data = ctx.request.body;
-    await team.update(data);
+    await competition.update(data);
     ctx.status = 204;
   }
   /**
-   * delete team
+   * delete competition
    */// ============================================================================================>
   async destroy() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const competition = await ctx.model.Competition.findByPk(id);
+    if (!competition) {
       ctx.status = 404;
       return;
     }
 
-    await team.destroy();
+    await competition.destroy();
     ctx.status = 200;
   }
 }
 
-module.exports = teamController;
+module.exports = competitionController;

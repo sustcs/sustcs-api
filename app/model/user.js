@@ -21,5 +21,13 @@ module.exports = app => {
       },
     });
   };
+  User.findByschool_id = async function(school_id) {
+    return await this.findOne({
+      where: {
+        school_id,
+      },
+      attributes: [ 'type' ],
+    });
+  };
   return User;
 };

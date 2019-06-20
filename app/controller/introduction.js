@@ -11,7 +11,6 @@ class IntroductionController extends Controller {
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
-      where: { enable: true },
       raw: true,
     };
     const list = await ctx.model.Introduction.findAll(query);

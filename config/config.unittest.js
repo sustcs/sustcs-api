@@ -8,3 +8,6 @@ exports.sequelize = {
   password: '123456',
   database: 'sustcs-unittest',
 };
+exports.qrCode = {
+  expire: 300,
+};

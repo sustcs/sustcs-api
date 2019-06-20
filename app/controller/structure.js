@@ -1,9 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-class teamController extends Controller {
+class structureController extends Controller {
   /**
-   * list all teams
+   * list all structures
    */// ============================================================================================>
   async index() {
     // get and check params
@@ -13,81 +13,83 @@ class teamController extends Controller {
       offset: ctx.helper.parseInt(ctx.query.offset),
       raw: true,
     };
-    const list = await ctx.model.Team.findAll(query);
+    const list = await ctx.model.Structure.findAll(query);
     ctx.status = 200;
     ctx.body = list;
   }
   /**
-   * show team info
+   * show structure info
    */// ============================================================================================>
   async show() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const structure = await ctx.model.Structure.findByPk(id);
+    if (!structure) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "structure don't exist",
       };
       return;
     }
     ctx.status = 200;
-    ctx.body = team;
+    ctx.body = structure;
   }
   /**
-   * create team
+   * create structure
    */// ============================================================================================>
   async create() {
     const ctx = this.ctx;
-    const { title, description, enable } = ctx.request.body;
-    const team = await ctx.model.Team.findByTitle(title);
-    if (team !== null) {
+    const { title } = ctx.request.body;
+    const structure = await ctx.model.Structure.findByTitle(title);
+    if (structure !== null) {
       ctx.status = 403;
       ctx.body = {
         statusCode: 403,
-        msg: 'team exist',
+        msg: 'structure exist',
       };
       return;
     }
-    const result = await ctx.model.Team.create({ title, description, enable });
+    const result = await ctx.model.Structure.create(ctx.request.body);
     ctx.status = 201;
-    ctx.body = result;
+    ctx.body = {
+      id: result.id,
+    };
   }
   /**
-   * update team info
+   * update structure info
    */// ============================================================================================>
   async update() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const structure = await ctx.model.Structure.findByPk(id);
+    if (!structure) {
       ctx.status = 404;
       ctx.body = {
         statusCode: 404,
-        msg: "team don't exist",
+        msg: "structure don't exist",
       };
       return;
     }
     const data = ctx.request.body;
-    await team.update(data);
+    await structure.update(data);
     ctx.status = 204;
   }
   /**
-   * delete team
+   * delete structure
    */// ============================================================================================>
   async destroy() {
     const ctx = this.ctx;
     const id = ctx.helper.parseInt(ctx.params.id);
-    const team = await ctx.model.Team.findByPk(id);
-    if (!team) {
+    const structure = await ctx.model.Structure.findByPk(id);
+    if (!structure) {
       ctx.status = 404;
       return;
     }
 
-    await team.destroy();
+    await structure.destroy();
     ctx.status = 200;
   }
 }
 
-module.exports = teamController;
+module.exports = structureController;

@@ -3,15 +3,14 @@
 module.exports = {
   // 在执行数据库升级时调用的函数，创建 user 表
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DATE, STRING } = Sequelize;
+    const { INTEGER, DATE, STRING, TEXT } = Sequelize;
     await queryInterface.createTable('users', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      username: STRING,
-      avatar_url: STRING,
-      openid: { type: STRING, primaryKey: true },
-      school_id: STRING,
+      title: STRING,
+      poster: STRING,
       type: STRING,
-      real_name: STRING,
+      synopsis: TEXT,
+      description: STRING,
       created_at: DATE,
       updated_at: DATE,
     });
