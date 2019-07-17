@@ -1,4 +1,5 @@
 router.resources('users', '/users', controller.user);
+
 |Method|Path|Route Name|middleware|Controller.Action|Note|
 |--|--|--|--|--|--|
 |GET|/users|users||app.controller.user.index|
